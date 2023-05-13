@@ -1,5 +1,7 @@
+import json
+
 from fastapi import FastAPI, Request
-import pyodbc
+from fastapi.responses import JSONResponse
 import pyodbc
 from db.conn import connection_string
 from Executor import driver, queries
@@ -28,24 +30,48 @@ async def test_db_connection():
     return {"message": "Failed to connect to the database"}
 
 
-@app.post("/users")
+@app.post("/register_users")
 async def create_user(request: Request):
     try:
-        query_params = dict(request)
-        query_params = query_params['query_string']
-        name, email, password, \
-            user_type, \
-            pin_code, phone_number = get_user_params(query_params)
+        attr = await request.form()
+        name, email, password, user_type, pin_code, phone_number = get_user_params(attr)
         qr_code, wallet_id = get_qr_and_wallet(phone_number)
 
-        driver.exec_store_proc(queries.sp_post_users,
-                               [name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number])
+        driver.exec_store_proc_post(queries.sp_post_users,
+                                    [name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number])
         return {"message": "User Registration successful"}
     except Exception as e:
         print(e)
         return {"Error": e}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.get("/get_users")
+async def get_users():
+    try:
+        user_data = driver.exec_query(queries.get_users_from_db, is_col_required=True)
+        user_data = user_data.to_json(orient='records')
+        return JSONResponse(json.loads(user_data), status_code=200)
+    except Exception as e:
+        return JSONResponse(e, status_code=404)
+
+
+@app.delete("/delete_users")
+async def delete_user():
+    try:
+        user_data = driver.exec_query(queries.get_users_from_db, is_col_required=True)
+        user_data = user_data.to_json(orient='records')
+        return JSONResponse(json.loads(user_data), status_code=200)
+    except Exception as e:
+        return JSONResponse(e, status_code=404)
+
+
+@app.get("/login_users")
+async def login_user(request: Request):
+    try:
+        attr = await request.form()
+        pn = attr['phone_number']
+        pw = attr['password']
+        verify = driver.exec_store_proc_get(queries.sp_verify_user, [pn, pw], is_col_required=False)
+        return JSONResponse(verify[0][0], status_code=200)
+    except Exception as e:
+        return JSONResponse(e, status_code=404)

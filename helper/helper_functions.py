@@ -6,16 +6,13 @@ import base64
 from io import BytesIO
 
 
-
 def get_user_params(params):
-    regular_str = params.decode('utf-8')
-    attr = parse_qs(regular_str)
-    name = ', '.join(attr['name'])
-    email = ', '.join(attr['email'])
-    password = ', '.join(attr['password'])
-    user_type = ', '.join(attr['user_type'])
-    pin_code = ', '.join(attr['pin_code'])
-    phone_number = ', '.join(attr['phone_number'])
+    name = params['name']
+    email = params['email']
+    password = params['password']
+    user_type = params['user_type']
+    pin_code = params['pin_code']
+    phone_number = params['phone_number']
     return name, email, password, user_type, pin_code, phone_number
 
 

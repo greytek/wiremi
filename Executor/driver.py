@@ -3,8 +3,7 @@ import pyodbc
 import pandas as pd
 
 
-
-def exec_store_proc(name, params, is_col_required=False):
+def exec_store_proc_post(name, params, is_col_required=False):
     try:
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
@@ -17,7 +16,6 @@ def exec_store_proc(name, params, is_col_required=False):
     except Exception as e:
         print(e)
         pass
-
 
 
 def exec_query(sql_query, is_col_required=False):
@@ -33,3 +31,25 @@ def exec_query(sql_query, is_col_required=False):
         return results
     except Exception as e:
         pass
+
+
+def exec_store_proc_get(name, params, is_col_required=False):
+    try:
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+        if params:
+            param_string = ','.join(['?'] * len(params))
+        else:
+            param_string = ''
+        if params:
+            result = cursor.execute("EXEC [dbo]." + name + param_string, params)
+        else:
+            result = cursor.execute(f"EXEC [dbo]. {name}")
+        results = cursor.fetchall()
+        if is_col_required:
+            columns = [column[0] for column in cursor.description]
+            results = pd.DataFrame.from_records(results, columns=columns)
+            return results
+        return results
+    except Exception as e:
+        print(str(e))
