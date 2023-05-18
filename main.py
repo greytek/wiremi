@@ -16,7 +16,7 @@ conn = pyodbc.connect(connection_string)
 async def test_db_connection():
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT *from [wiremi].[dbo].[User]")
+        cursor.execute("SELECT *from [dbo].[User]")
         rows = cursor.fetchall()
         print(rows)
         if rows[0] == 1:
