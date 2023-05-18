@@ -13,7 +13,16 @@ def get_user_params(params):
     user_type = params['user_type']
     pin_code = params['pin_code']
     phone_number = params['phone_number']
-    return name, email, password, user_type, pin_code, phone_number
+    if params['company_name']:
+        company_name = params['company_name']
+    else:
+        company_name = ''
+    if params['industry']:
+        industry = params['industry']
+    else:
+        industry = ''
+        print(name, email, password, user_type, pin_code, phone_number, company_name, industry)
+    return name, email, password, user_type, pin_code, phone_number, company_name, industry
 
 
 def get_qr_and_wallet(phone_number):

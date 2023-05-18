@@ -34,12 +34,18 @@ async def test_db_connection():
 async def create_user(request: Request):
     try:
         attr = await request.form()
-        name, email, password, user_type, pin_code, phone_number = get_user_params(attr)
+        name, email, password, user_type, pin_code, phone_number, company_name, industry = get_user_params(attr)
         qr_code, wallet_id = get_qr_and_wallet(phone_number)
 
-        driver.exec_store_proc_post(queries.sp_post_users,
-                                    [name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number])
-        return {"message": "User Registration successful"}
+        print(name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number, company_name, industry)
+        if user_type == 'student':
+            driver.exec_store_proc_post(queries.sp_post_users_student,
+                                        [name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number])
+            return {"message": "Student Registration successful"}
+        if user_type == 'business':
+            driver.exec_store_proc_post(queries.sp_post_users_business,
+                                        [name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number, company_name, industry])
+            return {"message": "Business Registration successful"}
     except Exception as e:
         print(e)
         return {"Error": e}
