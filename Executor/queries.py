@@ -1,5 +1,5 @@
 # Queries
-get_users_from_db = "SELECT *FROM [wiremi].[dbo].[User]"
+get_users_from_db = "SELECT *FROM [dbo].[User]"
 
 
 # Stored Procedures
