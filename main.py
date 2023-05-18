@@ -23,7 +23,6 @@ async def test_db_connection():
     except pyodbc.Error as ex:
         return {"message": f"Error connecting to the database: {str(ex)}"}
     finally:
-        cursor.close()
         conn.close()
 
     return {"message": "Failed to connect to the database"}
