@@ -18,8 +18,7 @@ async def test_db_connection():
         cursor = conn.cursor()
         cursor.execute("SELECT *from [dbo].[User]")
         rows = cursor.fetchall()
-        print(rows)
-        if rows[0] == 1:
+        if rows:
             return {"message": "Database connected successfully"}
     except pyodbc.Error as ex:
         return {"message": f"Error connecting to the database: {str(ex)}"}
