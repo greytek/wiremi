@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'wiremi-app'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AF6B726B422546DD83F2644773218356 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9B575CB7652B44FEA29F3F0C2DDCB0D6 }}
