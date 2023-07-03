@@ -39,7 +39,6 @@ async def create_user(request: Request):
         name, email, password, user_type, pin_code, phone_number, company_name, industry = get_user_params(attr)
         qr_code, wallet_id = get_qr_and_wallet(phone_number)
 
-        print(name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number, company_name, industry)
         if user_type == 'student':
             driver.exec_store_proc_post(queries.sp_post_users_student,
                                         [name, email, password, user_type, qr_code, pin_code, wallet_id, phone_number])
@@ -118,7 +117,7 @@ async def process_payment(payment_request: PaymentRequest):
 async def root():
     if conn:
         return {"Hello World from Wiremi Root and DB Connected"}
-    return {"DB Not Connected"}
+    return {"DB Not Connected in the sysytem"}
 
 
 if __name__ == "__main__":
