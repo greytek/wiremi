@@ -1,11 +1,11 @@
-from db.conn import connection_string
+from drivers.db.conn import connection_string_live, connection_string_local
 import pyodbc
 import pandas as pd
 
 
 def exec_store_proc_post(name, params, is_col_required=False):
     try:
-        conn = pyodbc.connect(connection_string)
+        conn = pyodbc.connect(connection_string_live)
         cursor = conn.cursor()
         if params:
             param_string = ','.join(['?' for _ in range(len(params))])
@@ -20,7 +20,7 @@ def exec_store_proc_post(name, params, is_col_required=False):
 
 def exec_query(sql_query, is_col_required=False):
     try:
-        conn = pyodbc.connect(connection_string)
+        conn = pyodbc.connect(connection_string_live)
         cursor = conn.cursor()
         cursor.execute(sql_query)
         results = cursor.fetchall()
@@ -35,7 +35,7 @@ def exec_query(sql_query, is_col_required=False):
 
 def exec_store_proc_get(name, params, is_col_required=False):
     try:
-        conn = pyodbc.connect(connection_string)
+        conn = pyodbc.connect(connection_string_live)
         cursor = conn.cursor()
         if params:
             param_string = ','.join(['?'] * len(params))

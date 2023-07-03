@@ -11,3 +11,12 @@ class User(BaseModel):
     created_at: str
     user_type: str
     phone_number: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class PaymentRequest(BaseModel):
+    amount: int
+    token: str
