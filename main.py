@@ -117,7 +117,7 @@ async def process_payment(payment_request: PaymentRequest):
 async def root():
     if conn:
         return {"Hello World from Wiremi Root and DB Connected"}
-    return {"DB Not Connected in the sysytem"}
+    return {"DB Not Connected in the sysyggggtem"}
 
 
 if __name__ == "__main__":
